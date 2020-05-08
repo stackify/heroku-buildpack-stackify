@@ -19,9 +19,14 @@ if [ ! -z "$STACKIFY_KEY" ]; then
     sed -i 's:^[ \t]*activationKey[ \t]*=\([ \t]*.*\)$:activationKey='\"${STACKIFY_KEY}\"':' ${CONFIG_FILE}
 fi
 
-if [ ! -z "$STACKIFY_ENV" ]; then
-    echo "STACKIFY_ENV: ${STACKIFY_ENV}"
-    sed -i 's:^[ \t]*environment[ \t]*=\([ \t]*.*\)$:environment='\"${STACKIFY_ENV}\"':' ${CONFIG_FILE}
+if [ ! -z "$STACKIFY_APPLICATION_NAME" ]; then
+    echo "STACKIFY_APPLICATION_NAME: ${STACKIFY_APPLICATION_NAME}"
+    sed -i 's:^[ \t]*deviceAlias[ \t]*=\([ \t]*.*\)$:deviceAlias='\"${STACKIFY_APPLICATION_NAME}\"':' ${CONFIG_FILE}
+fi
+
+if [ ! -z "$STACKIFY_ENVIRONMENT_NAME" ]; then
+    echo "STACKIFY_ENV: ${STACKIFY_ENVIRONMENT_NAME}"
+    sed -i 's:^[ \t]*environment[ \t]*=\([ \t]*.*\)$:environment='\"${STACKIFY_ENVIRONMENT_NAME}\"':' ${CONFIG_FILE}
 fi
 
 # set all profilers to use HTTP transport
