@@ -15,7 +15,7 @@ heroku buildpacks:add -i=1 https://github.com/stackify/heroku-buildpack-stackify
 
 ```
 heroku config:set STACKIFY_KEY="XXXXXXXXXX"
-heroku config:set STACKIFY_APPLICATION_NAME="My Heroku Application" 
+heroku config:set STACKIFY_APPLICATION_NAME="Ruby Application" 
 heroku config:set STACKIFY_ENVIRONMENT_NAME="Production" 
 ```
 
