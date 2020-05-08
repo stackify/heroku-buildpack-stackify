@@ -34,6 +34,16 @@ for DEB in $(ls -1 $DPKG_CACHE_DIR/*.deb); do
   rm -rf $DEB
 done
 
+# clean up
+rm -rf $BUILD_DIR/$DPKG/usr/local/stackify/install
+rm -rf $BUILD_DIR/$DPKG/usr/local/stackify/.java/latest
+rm -rf $BUILD_DIR/$DPKG/etc/init.d/stackify-agent
+rm -rf $BUILD_DIR/$DPKG/usr/local/stackify/stackify-php-apm/Stackify.php
+rm -rf $BUILD_DIR/$DPKG/usr/local/stackify/stackify-php-apm/linux_*
+rm -rf $BUILD_DIR/$DPKG/usr/local/stackify/stackify-dotnet-apm/*.dll
+rm -rf $BUILD_DIR/$DPKG/usr/local/stackify/stackify-dotnet-apm/*.so
+rm -rf $BUILD_DIR/$DPKG/usr/local/stackify/stackify-java-apm/*.jar
+
 # move startup script
 mkdir -p "$BUILD_DIR/.profile.d"
 cp "$BUILDPACK_DIR/startup/stackify.sh" "$BUILD_DIR/.profile.d/"
