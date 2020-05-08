@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# bin/compile BUILD_DIR CACHE_DIR ENV_DIR
+
+# fail fast
+set -e
+
+# parse and derive params
+BUILD_DIR=$1
+CACHE_DIR=$2
+ENV_DIR=$3
+BUILDPACK_DIR=$(cd "$(dirname "$0")"; cd ..; pwd)
+
+# util
+source "$BUILDPACK_DIR/bin/util.sh"
+
+# export env variables
+export_env_dir $ENV_DIR
+
+# download link
+DEFAULT_STACKIFY_DOWNLOAD_URL="https://download.stackify.com/deb/pool/s/st/stackify-agent_latest_amd64.deb"
+if [ -z "$STACKIFY_DOWNLOAD_URL" ]; then
+    STACKIFY_DOWNLOAD_URL=$DEFAULT_STACKIFY_DOWNLOAD_URL
+fi
+
+# install dpkg
+DPKG_CACHE_DIR="$CACHE_DIR/dpkg/cache"
+mkdir -p $DPKG_CACHE_DIR
+curl -L -o $DPKG_CACHE_DIR/`basename $STACKIFY_DOWNLOAD_URL` $STACKIFY_DOWNLOAD_URL
+DPKG=.dpkg
+mkdir -p $BUILD_DIR/$DPKG
+for DEB in $(ls -1 $DPKG_CACHE_DIR/*.deb); do
+  topic "Installing $(basename $DEB)"
+  dpkg -x $DEB $BUILD_DIR/$DPKG/
+done
+
+# move startup script
+mkdir -p "$BUILD_DIR/.profile.d"
+cp "$BUILDPACK_DIR/startup/stackify.sh" "$BUILD_DIR/.profile.d/"
+chmod +x "$BUILD_DIR/.profile.d/stackify.sh"
