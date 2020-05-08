@@ -31,6 +31,7 @@ mkdir -p $BUILD_DIR/$DPKG
 for DEB in $(ls -1 $DPKG_CACHE_DIR/*.deb); do
   topic "Installing $(basename $DEB)"
   dpkg -x $DEB $BUILD_DIR/$DPKG/
+  rm -rf $DEB
 done
 
 # move startup script
