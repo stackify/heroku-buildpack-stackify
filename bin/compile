@@ -36,7 +36,8 @@ done
 
 # clean up
 rm -rf $BUILD_DIR/$DPKG/usr/local/stackify/install
-rm -rf $BUILD_DIR/$DPKG/usr/local/stackify/.java/latest
+rm -rf $BUILD_DIR/$DPKG/usr/local/stackify/.java/aarch64
+rm -rf $BUILD_DIR/$DPKG/usr/local/stackify/.java/i586
 rm -rf $BUILD_DIR/$DPKG/etc/init.d/stackify-agent
 rm -rf $BUILD_DIR/$DPKG/usr/local/stackify/stackify-php-apm/Stackify.php
 rm -rf $BUILD_DIR/$DPKG/usr/local/stackify/stackify-php-apm/linux_*
