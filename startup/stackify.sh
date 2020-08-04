@@ -30,6 +30,12 @@ if [ ! -z "$STACKIFY_ENVIRONMENT_NAME" ]; then
     sed -i 's:^[ \t]*environment[ \t]*=\([ \t]*.*\)$:environment='\""${STACKIFY_ENVIRONMENT_NAME}"\"':' ${CONFIG_FILE}
 fi
 
+# do not let JAVA_TOOL_OPTIONS slip in (as the JVM does by default)
+if [ ! -z "$JAVA_TOOL_OPTIONS" ]; then
+    echo "warning: ignoring JAVA_TOOL_OPTIONS=$JAVA_TOOL_OPTIONS"
+    unset JAVA_TOOL_OPTIONS
+fi
+
 # set all profilers to use HTTP transport
 export STACKIFY_TRANSPORT="agent_http"
 
