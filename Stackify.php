@@ -342,7 +342,7 @@ class Profiler
                     $opts = array('http' =>
                         array(
                             'method' => 'POST',
-                            'header' => "Content-type: application/json\r\n",
+                            'header' => "Connection: close\r\n" . "Content-type: application/json\r\n",
                             'content' => $output_json
                         ),
                         'ssl' =>
