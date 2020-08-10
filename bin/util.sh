@@ -29,3 +29,19 @@ export_env_dir() {
     done
   fi
 }
+
+
+##############################
+# Checks if system is 64 bit
+# Returns:
+#   1/0 (false/true)
+##############################
+is_64bit() {
+
+    # this will check if the machine is 64bit and if so return true
+    if [[ "`uname -m`" == "x86_64" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}

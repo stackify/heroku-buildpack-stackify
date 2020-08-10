@@ -34,6 +34,51 @@ for DEB in $(ls -1 $DPKG_CACHE_DIR/*.deb); do
   rm -rf $DEB
 done
 
+# install php
+
+if hash php 2>/dev/null; then
+
+    PHP_APM_DIR=$BUILD_DIR/$DPKG/usr/local/stackify/stackify-php-apm
+    EXTENSION_DIR=`php -r 'echo ini_get("extension_dir");'`
+    PHP_MAJOR_VERSION=`php -r 'echo PHP_MAJOR_VERSION;'`
+    PHP_MINOR_VERSION=`php -r 'echo PHP_MINOR_VERSION;'`
+    PHP_ZTS_ENABLED=`php -r 'echo PHP_ZTS;'`
+    PHP_DEBUG_ENABLED=`php -r 'echo PHP_DEBUG;'`
+
+    PHP_VERSION="${PHP_MAJOR_VERSION}.${PHP_MINOR_VERSION}";
+    if [[ "$PHP_ZTS_ENABLED" == "1" ]]; then
+        PHP_VERSION="${PHP_VERSION}.zts";
+    fi
+
+    echo "Detected PHP ${PHP_VERSION} and extension directory: ${EXTENSION_DIR}"
+
+    EXTENSION_FILE="${PHP_APM_DIR}/linux_32/stackify-${PHP_VERSION}.so"
+    if (is_64bit); then
+        EXTENSION_FILE="${PHP_APM_DIR}/linux_64/stackify-${PHP_VERSION}.so"
+    fi
+
+    if [[ -f "$EXTENSION_FILE" ]]; then
+        echo "Installing into $EXTENSION_DIR"
+        cp $PHP_APM_DIR/Stackify.php ${EXTENSION_DIR}/Stackify.php
+        cp $EXTENSION_FILE $EXTENSION_DIR/stackify.so
+    fi
+
+    # update permissions
+    chmod 664 ./*.so > /dev/null 2>&1
+    chmod 664 ./*.php > /dev/null 2>&1
+    chmod 775 ./linux_* > /dev/null 2>&1
+    chmod 775 ./linux_*/*.so > /dev/null 2>&1
+
+    PHP_INI="/app/.heroku/php/etc/php/php.ini"
+    if [[ -f "$PHP_INI" ]]; then
+        echo "[stackify]" >> $PHP_INI
+        echo "extension=stackify.so" >> $PHP_INI
+    fi
+
+else
+    echo "Unable to find PHP installation"
+fi
+
 # clean up
 rm -rf $BUILD_DIR/$DPKG/usr/local/stackify/install
 rm -rf $BUILD_DIR/$DPKG/usr/local/stackify/.java/aarch64
