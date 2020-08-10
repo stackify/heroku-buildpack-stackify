@@ -63,15 +63,10 @@ if command -v php &> /dev/null; then
         cp $PHP_APM_DIR/Stackify.php $EXTENSION_DIR/Stackify.php
         ls -l $EXTENSION_DIR
         cp $EXTENSION_FILE $EXTENSION_DIR/stackify.so
+        ls -l $EXTENSION_DIR
         echo "2"
     fi
-
-    # update permissions
-    chmod 664 ./*.so > /dev/null 2>&1
-    echo "3"
-    chmod 664 ./*.php > /dev/null 2>&1
-    chmod 775 ./linux_* > /dev/null 2>&1
-    chmod 775 ./linux_*/*.so > /dev/null 2>&1
+ 
     echo "4"
 
     PHP_INI="/app/.heroku/php/etc/php/php.ini"
