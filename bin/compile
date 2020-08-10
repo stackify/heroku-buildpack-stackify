@@ -36,7 +36,7 @@ done
 
 # install php
 
-if hash php 2>/dev/null; then
+if command -v php &> /dev/null; then
 
     PHP_APM_DIR=$BUILD_DIR/$DPKG/usr/local/stackify/stackify-php-apm
     EXTENSION_DIR=`php -r 'echo ini_get("extension_dir");'`
