@@ -59,11 +59,8 @@ if command -v php &> /dev/null; then
 
     if [[ -f "$EXTENSION_FILE" ]]; then
         echo "Installing into $EXTENSION_DIR"
-        ls -l $EXTENSION_DIR
         cp $PHP_APM_DIR/Stackify.php $EXTENSION_DIR/Stackify.php
-        ls -l $EXTENSION_DIR
         cp $EXTENSION_FILE $EXTENSION_DIR/stackify.so
-        ls -l $EXTENSION_DIR
     fi
 
     PHP_INI="/app/.heroku/php/etc/php/php.ini"
