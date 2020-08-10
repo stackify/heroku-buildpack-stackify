@@ -339,29 +339,36 @@ class Profiler
                 try {
                     error_log("sending message 1");
                     $output_json = "[" . $output_json . "]";
-                    $opts = array('http' =>
-                        array(
-                            'method' => 'POST',
-                            'header' => "Connection: close\r\n" . "Content-type: application/json\r\n",
-                            'content' => $output_json
-                        ),
-                        'ssl' =>
-                            array(
-                                'verify_peer' => false,
-                                'verify_peer_name' => false
-                            )
-
-                    );
-                    error_log("sending message 2 ");
-                    $post_url = self::$transportHttpEndpoint . "/traces";
-                    $context  = stream_context_create($opts);
+                    $url = self::$transportHttpEndpoint . "/traces";
+                    error_log("sending message 2");
+                    //open connection
+                    $ch = curl_init();
                     error_log("sending message 3");
-                    file_get_contents($post_url, false, $context);
+                    //set the url, number of POST vars, POST data
+                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+                    curl_setopt($ch,CURLOPT_URL, $url);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $output_json);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                            'Content-Type: application/json',
+                            'Content-Length: ' . strlen($output_json))
+                    );
                     error_log("sending message 4");
+
+                    //execute post
+                    $result = curl_exec($ch);
+                    error_log("sending message 5");
+                    //close connection
+                    curl_close($ch);
+                    error_log("sending message 6");
+
+
+
                 } catch (\Exception $e) {
                     self::log(3, "Stackify\Profiler::sendTrace - error posting trace to [" . self::$transportHttpEndpoint . "].". $e->getMessage());
-                }
-                error_log("sending message 5");
+                } 
             }
         }
 
